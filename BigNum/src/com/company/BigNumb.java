@@ -20,6 +20,10 @@ public class BigNumb {
         for (int i = 0 ; i < s.length() ;  i++ ) {
                 data.add(charToInt(s.charAt(i)));
         }
+        // 12345 => 2345 + 0001
+        // 55555 => 5555 + 0005
+        // ==    => 7900 + 0006
+        
         Collections.reverse(data);
     }
 
