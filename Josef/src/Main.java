@@ -1,37 +1,55 @@
-import java.lang.ref.Reference;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 
 
 public class Main {
 
     public static void main(String[] args) {
+
         Treap T = new Treap();
+
         //System.out.println(T.root);
         T.root = T.NewTreap(1);
-        for ( int i = 2  ; i < 10 ; i++ ) {
+        for ( int i = 2  ; i <= 10 ; i++ ) {
             T.root = T.Merge(T.root, T.NewTreap(i));
         }
         System.out.println(T);
 
-        Reference<Integer> a = null;
-        Reference<Integer> b = null;
-        a.set(1);
-        b.set(1);
+
+
+        MutableInt a = new MutableInt(1);
+        MutableInt b = new MutableInt(1);
+
         T.Split(0,a,b);
         System.out.println(a+" "+b);
     }
 }
 
+class MutableInt {
+    private int val;
+    MutableInt ( int x ) {
+        val = x;
+    }
+    public void setVal ( int v ) {
+        val = v;
+    }
+    public int getVal ( ) {
+        return val;
+    }
+    public String toString(){
+        return (""+val);
+    }
+}
+
 class Treap {
     private class TNode {
-        int LSon;
-        int RSon;
+        MutableInt LSon;
+        MutableInt RSon;
         double Key;
         int Value;
         TNode(){
-            LSon = 0;
-            RSon = 0;
+            LSon = new MutableInt(0);
+            RSon = new MutableInt(0);
             Key  = Math.random();
         }
     }
@@ -50,6 +68,7 @@ class Treap {
         Tree.add(v);
         return writer;
     }
+
     int Merge ( int a , int b ) {
         if ( a == 0 || b == 0 )
             return a+b;
@@ -58,22 +77,24 @@ class Treap {
         TNode B = Tree.get(b);
 
         if ( A.Key > B.Key ) {
-            A.RSon = Merge(A.RSon , b );
+            A.RSon.setVal(Merge(A.RSon.getVal(), b)) ;
             return a;
         }
         else {
-            B.LSon = Merge(a , B.LSon );
+            B.LSon.setVal( Merge(a , B.LSon.getVal() ) ) ;
             return b;
         }
     }
-    void Split(int r, Reference<Integer> a , Reference<Integer> b ) {
+
+    void Split(int r, MutableInt a , MutableInt b ) {
         if ( r == 0 ){
-            a.set(0);
-            b.set(0);
+            a.setVal(0);
+            b.setVal(0);
 
             System.out.println("hello");
             return;
         }
+
     }
     void Delete(int key) {
 
@@ -84,9 +105,9 @@ class Treap {
         if ( v == 0 )
             return;
         TNode curent = Tree.get(v);
-        recursiveToString(curent.LSon , t);
+        recursiveToString(curent.LSon.getVal() , t);
         t.append("{").append(curent.Value).append("} ");
-        recursiveToString(curent.RSon , t);
+        recursiveToString(curent.RSon.getVal() , t);
     }
     @Override
     public String toString() {
@@ -94,4 +115,6 @@ class Treap {
         recursiveToString(root,t);
         return t.toString();
     }
+
+
 }
